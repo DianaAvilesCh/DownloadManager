@@ -49,7 +49,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolderDatos> {
         holder.btndes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("URL",usuario.getUrl());
                 mainActivity.BajarDoc(holder.tvNombre.getContext(),usuario.getDescripcion(),usuario.getUrl());
             }
         });

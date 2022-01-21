@@ -46,16 +46,13 @@ public class MainActivity extends AppCompatActivity {
     RequestQueue requestQueue;
     String URL = "https://my-json-server.typicode.com/DianaAvilesCh/JsonDL/db";
     ArrayList<Ficheros> lista;
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         requestQueue = Volley.newRequestQueue(this);
-        ArrayList<String> permisos = new ArrayList<String>();
-        permisos.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
-        getPermission(permisos);
         stringRequest();
 
         recyclerView = (RecyclerView) findViewById(R.id.recyclerId);
@@ -98,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 },
                 new Response.ErrorListener() {
                     @Override
-//                    public void onErrorResponse(VolleyError error) {
-//
-//                    }
                     public void onErrorResponse(final VolleyError error) {
                         txtUser.setKeyListener(null);
                         if (error.networkResponse == null
@@ -116,44 +110,6 @@ public class MainActivity extends AppCompatActivity {
         );
         requestQueue.add(request);
     }
-
-
-
-    public void getPermission(ArrayList<String> permisosSolicitados){
-
-        ArrayList<String> listPermisosNOAprob = getPermisosNoAprobados(permisosSolicitados);
-        if (listPermisosNOAprob.size()>0)
-            if (Build.VERSION.SDK_INT >= 23)
-                requestPermissions(listPermisosNOAprob.toArray(new String[listPermisosNOAprob.size()]), 1);
-
-    }
-
-
-    public ArrayList<String> getPermisosNoAprobados(ArrayList<String>  listaPermisos) {
-        ArrayList<String> list = new ArrayList<String>();
-        for(String permiso: listaPermisos) {
-            if (Build.VERSION.SDK_INT >= 23)
-                if(checkSelfPermission(permiso) != PackageManager.PERMISSION_GRANTED)
-                    list.add(permiso);
-
-        }
-        return list;
-    }
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        String s="";
-        if(requestCode==1)    {
-            for(int i =0; i<permissions.length;i++) {
-                if (grantResults[i] == PackageManager.PERMISSION_GRANTED)
-                    s=s + "OK " + permissions[i] + "\n";
-                else
-                    s=s + "NO  " + permissions[i] + "\n";
-            }
-            Toast.makeText(this.getApplicationContext(), s, Toast.LENGTH_LONG).show();
-        }
-    }
-
 
     public void BajarDoc(Context context, String file, String url){
         DownloadManager downloadManager =(DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
